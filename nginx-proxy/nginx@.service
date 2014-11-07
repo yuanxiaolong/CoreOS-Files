@@ -35,4 +35,4 @@ ExecStop=/usr/bin/docker stop nginx.%i
 
 [X-Fleet]
 # Don't schedule on the same machine as other nginx instances
-Conflicts=nginx@*.service
+# Conflicts=nginx@*.service
