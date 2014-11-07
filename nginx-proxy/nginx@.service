@@ -28,7 +28,7 @@ ExecStartPre=-/usr/bin/docker kill nginx.%i
 ExecStartPre=-/usr/bin/docker rm nginx.%i
 ExecStartPre=/usr/bin/docker pull jwilder/nginx-proxy
 ExecStart=/usr/bin/docker run -d --name nginx.%i -p ${COREOS_PUBLIC_IPV4}:%i:80 \
-jwilder/nginx-proxy -v /var/run/docker.sock:/tmp/docker.sock
+-v /var/run/docker.sock:/tmp/docker.sock jwilder/nginx-proxy 
 
 # Stop
 ExecStop=/usr/bin/docker stop nginx.%i
