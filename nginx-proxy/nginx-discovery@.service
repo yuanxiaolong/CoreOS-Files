@@ -3,12 +3,12 @@ Description=nginx web server on port %i etcd registration
 
 # Requirements
 Requires=etcd.service
-Requires=nginx@%i.service
+Requires=nginx@80.service
 
 # Dependency ordering and binding
 After=etcd.service
-After=nginx@%i.service
-BindsTo=nginx@%i.service
+After=nginx@80.service
+BindsTo=nginx@80.service
 
 [Service]
 
@@ -19,9 +19,9 @@ EnvironmentFile=/etc/environment
 ## Test whether service is accessible and then register useful information
 ExecStart=/bin/bash -c '\
   while true; do \
-    curl -f ${COREOS_PUBLIC_IPV4}:%i; \
+    curl -f ${COREOS_PUBLIC_IPV4}:80; \
     if [ $? -eq 0 ]; then \
-      etcdctl set /services/nginx/${COREOS_PUBLIC_IPV4} \'{"host": "%H", "ipv4_addr": ${COREOS_PUBLIC_IPV4}, "port": %i}\' --ttl 60; \
+      etcdctl set /services/nginx/${COREOS_PUBLIC_IPV4} \'{"host": "%H", "ipv4_addr": ${COREOS_PUBLIC_IPV4}, "port": 80}\' --ttl 60; \
     else \
       etcdctl rm /services/nginx/${COREOS_PUBLIC_IPV4}; \
     fi; \
@@ -33,4 +33,4 @@ ExecStop=/usr/bin/etcdctl rm /services/nginx/${COREOS_PUBLIC_IPV4}
 
 [X-Fleet]
 # Schedule on the same machine as the associated nginx service
-MachineOf=nginx@%i.service
+MachineOf=nginx@80.service
