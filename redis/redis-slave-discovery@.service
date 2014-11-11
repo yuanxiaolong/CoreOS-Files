@@ -1,0 +1,36 @@
+[Unit]
+Description=redis-slave web server on port %i etcd registration
+
+# Requirements
+Requires=etcd.service
+Requires=redis-slave@%i.service
+
+# Dependency ordering and binding
+After=etcd.service
+After=redis-slave@%i.service
+BindsTo=redis-slave@%i.service
+
+[Service]
+
+# Get CoreOS environmental variables
+EnvironmentFile=/etc/environment
+
+# Start
+## Test whether service is accessible and then register useful information
+ExecStart=/bin/bash -c '\
+  while true; do \
+    curl -f ${COREOS_PUBLIC_IPV4}:%i; \
+    if [ $? -eq 0 ]; then \
+      etcdctl set /services/redis-slave/${COREOS_PUBLIC_IPV4} \'{"host": "%H", "ipv4_addr": ${COREOS_PUBLIC_IPV4}, "port": %i}\' --ttl 60; \
+    else \
+      etcdctl rm /services/redis-slave/${COREOS_PUBLIC_IPV4}; \
+    fi; \
+    sleep 50; \
+  done'
+
+# Stop
+ExecStop=/usr/bin/etcdctl rm /services/redis-slave/${COREOS_PUBLIC_IPV4}
+
+[X-Fleet]
+# Schedule on the same machine as the associated redis-slave service
+MachineOf=redis-slave@%i.service
