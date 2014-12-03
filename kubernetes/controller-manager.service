@@ -9,7 +9,7 @@ Wants=docker.service
 Wants=apiserver.service
 
 [Service]
-ExecStart=/opt/bin/controller-manager \
+ExecStart=/opt/bin/kube-controller-manager \
 -master=127.0.0.1:8080 \
 -logtostderr=true
 Restart=on-failure

@@ -6,7 +6,7 @@ Wants=etcd.service
 Wants=docker.service
 
 [Service]
-ExecStart=/opt/bin/apiserver \
+ExecStart=/opt/bin/kube-apiserver \
 -address=127.0.0.1 \
 -port=8080 \
 -etcd_servers=http://127.0.0.1:4001 \
@@ -18,4 +18,5 @@ ExecStartPost=-/bin/bash -c "until /usr/bin/curl http://127.0.0.1:8080; do echo 
 Restart=on-failure
 RestartSec=5
 
-[Install]WantedBy=multi-user.target
+[Install]
+WantedBy=multi-user.target

@@ -9,7 +9,7 @@ Wants=docker.service
 Wants=apiserver.service
 
 [Service]
-ExecStart=/opt/bin/scheduler -master=127.0.0.1:8080
+ExecStart=/opt/bin/kube-scheduler -master=127.0.0.1:8080
 Restart=on-failure
 RestartSec=5
 
