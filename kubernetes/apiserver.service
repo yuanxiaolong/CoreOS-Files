@@ -1,0 +1,21 @@
+[Unit]
+Description=Kubernetes API Server
+After=etcd.service
+After=docker.service
+Wants=etcd.service
+Wants=docker.service
+
+[Service]
+ExecStart=/opt/bin/apiserver \
+-address=127.0.0.1 \
+-port=8080 \
+-etcd_servers=http://127.0.0.1:4001 \
+-machines=10.132.187.71,10.132.187.108,10.132.187.69 \
+-logtostderr=true
+
+ExecStartPost=-/bin/bash -c "until /usr/bin/curl http://127.0.0.1:8080; do echo \"waiting for API server to come online...\"; sleep 3; done"
+
+Restart=on-failure
+RestartSec=5
+
+[Install]WantedBy=multi-user.target
