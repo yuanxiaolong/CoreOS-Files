@@ -1,0 +1,9 @@
+{
+ "id":"10.132.187.69",
+ "kind":"Minion",
+ "apiVersion":"v1beta1",
+ "hostIP": "10.132.187.69",
+ "labels":{
+    "name": "10.132.187.69"
+ }
+}
